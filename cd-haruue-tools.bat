@@ -1,0 +1,1 @@
+@cd /D D:\Android\sdk\haruue-tools

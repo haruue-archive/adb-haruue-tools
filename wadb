@@ -1,0 +1,15 @@
+#this is a standard wadb shell script to install on a normal android devices
+
+if [[ $USER_ID != 0 ]]&&[[ $UID != 0 ]] ; then
+    echo "need root!"
+elif [[ $1 = "start" ]] ; then
+    setprop service.adb.tcp.port 5555
+    stop adbd
+    start adbd
+elif [[ $1 = "stop" ]] ; then
+    setprop service.adb.tcp.port -1
+    stop adbd
+    start adbd
+else
+    echo "usage: wadb <start|stop>"
+fi
