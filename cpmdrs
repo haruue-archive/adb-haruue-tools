@@ -1,0 +1,95 @@
+#!/bin/bash
+
+# Get Material Design Icons for Android 
+# Haruue Icymoon 2016
+
+# Config your material design icons here, http://github.com/google/material-design-icons/
+src_path='/cygdrive/d/Git/material-design-icons'
+
+# Show Help
+showHelp() {
+    echo "Usage: cpmdrs <part-file-name> <dst-path>"
+    echo "Copy android resource files from $src_path to <dst-path>"
+    echo 'You have to config your material design path in this shell script before you use it, if you do not have one, please'
+    echo ""
+    echo "    git clone http://github.com/google/material-design-icons/"
+    echo ""
+}
+
+# Check argc
+if [[ ($1 == "-h") || ($1 == "--help") ]]; then
+    showHelp
+    exit 0
+elif [ $# -ne 2 ]; then
+    echo "Argument Error"
+    showHelp
+    exit 1
+elif [[ ($src_path == "") || !(-d $src_path) ]]; then
+    echo "Invalid source path"
+    showHelp
+    exit 1
+fi
+
+# Initialize
+part_filename=$1
+dst_path=$2
+
+# Search
+find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl >> /tmp/mvmdrs.tmp
+
+# Get result
+drawable_hdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-hdpi')
+drawable_mdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-mdpi')
+drawable_xhdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-xhdpi')
+drawable_xxhdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-xxhdpi')
+drawable_xxxhdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-xxxhdpi')
+drawable_v21=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-anydpi\-v21')
+
+
+# Copy
+mkdir -p $dst_path/drawable-hdpi
+for f in $drawable_hdpi
+do
+	cp -f $f $dst_path/drawable-hdpi/$(basename $f)
+	echo $f '-->' $dst_path/drawable-hdpi/$(basename $f)
+done
+
+mkdir -p $dst_path/drawable-mdpi
+for f in $drawable_mdpi
+do
+	cp -f $f $dst_path/drawable-mdpi/$(basename $f)
+	echo $f '-->' $dst_path/drawable-mdpi/$(basename $f)
+done
+
+mkdir -p $dst_path/drawable-xhdpi
+for f in $drawable_xhdpi
+do
+	cp -f $f $dst_path/drawable-xhdpi/$(basename $f)
+	echo $f '-->' $dst_path/drawable-xhdpi/$(basename $f)
+done
+
+mkdir -p $dst_path/drawable-xxhdpi
+for f in $drawable_xxhdpi
+do
+	cp -f $f $dst_path/drawable-xxhdpi/$(basename $f)
+	echo $f '-->' $dst_path/drawable-xxhdpi/$(basename $f)
+done
+
+mkdir -p $dst_path/drawable-xxxhdpi
+for f in $drawable_xxxhdpi
+do
+	cp -f $f $dst_path/drawable-xxxhdpi/$(basename $f)
+	echo $f '-->' $dst_path/drawable-xxxhdpi/$(basename $f)
+done
+
+mkdir -p $dst_path/drawable-v21
+for f in $drawable_v21
+do
+	cp -f $f $dst_path/drawable-v21/$(basename $f)
+	echo $f '-->' $dst_path/drawable-v21/$(basename $f)
+done
+
+rm -f /tmp/mvmdrs.tmp
+
+echo ""
+echo "Complete!"
