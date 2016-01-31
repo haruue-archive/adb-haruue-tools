@@ -91,11 +91,11 @@ do
 	echo $f '-->' $dst_path/drawable-xxxhdpi/$(basename $f)
 done
 
-mkdir -p $dst_path/drawable-v21
+mkdir -p $dst_path/drawable-anydpi-v21
 for f in $drawable_v21
 do
-	cp -f $f $dst_path/drawable-v21/$(basename $f)
-	echo $f '-->' $dst_path/drawable-v21/$(basename $f)
+	cp -f $f $dst_path/drawable-anydpi-v21/$(basename $f)
+	echo $f '-->' $dst_path/drawable-anydpi-v21/$(basename $f)
 done
 
 echo ""
