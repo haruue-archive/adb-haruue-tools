@@ -39,7 +39,6 @@ if [[ $# -eq 3 ]]; then
 fi
 
 # Search
-search_result=$(find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl)
 if [[ $# -eq 2 ]]; then
     search_result=$(find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl)
 elif [[ $# -eq 3 ]]; then
