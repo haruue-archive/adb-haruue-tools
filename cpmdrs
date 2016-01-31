@@ -9,6 +9,7 @@ src_path='/cygdrive/d/Git/material-design-icons'
 # Show Help
 showHelp() {
     echo "Usage: cpmdrs <part-file-name> <dst-path>"
+    echo "Usage: cpmdrs <part-file-name> <dst-path> <other-regexp>"
     echo "Copy android resource files from $src_path to <dst-path>"
     echo 'You have to config your material design path in this shell script before you use it, if you do not have one, please'
     echo ""
@@ -20,7 +21,7 @@ showHelp() {
 if [[ ($1 == "-h") || ($1 == "--help") ]]; then
     showHelp
     exit 0
-elif [ $# -ne 2 ]; then
+elif [[ ($# -ne 2) && ($# -ne 3) ]]; then
     echo "Argument Error"
     showHelp
     exit 1
@@ -33,17 +34,25 @@ fi
 # Initialize
 part_filename=$1
 dst_path=$2
+if [[ $# -eq 3 ]]; then
+    other_rep=$3
+fi
 
 # Search
-find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl >> /tmp/mvmdrs.tmp
+search_result=$(find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl)
+if [[ $# -eq 2 ]]; then
+    search_result=$(find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl)
+elif [[ $# -eq 3 ]]; then
+    search_result=$(find $src_path -name *$part_filename* | grep -v web | grep -v ios | grep -v svg | grep -v ldrtl | grep $other_rep)
+fi
 
 # Get result
-drawable_hdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-hdpi')
-drawable_mdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-mdpi')
-drawable_xhdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-xhdpi')
-drawable_xxhdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-xxhdpi')
-drawable_xxxhdpi=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-xxxhdpi')
-drawable_v21=$(cat /tmp/mvmdrs.tmp | grep 'drawable\-anydpi\-v21')
+drawable_hdpi=$(echo "$search_result" | grep 'drawable\-hdpi')
+drawable_mdpi=$(echo "$search_result" | grep 'drawable\-mdpi')
+drawable_xhdpi=$(echo "$search_result" | grep 'drawable\-xhdpi')
+drawable_xxhdpi=$(echo "$search_result" | grep 'drawable\-xxhdpi')
+drawable_xxxhdpi=$(echo "$search_result" | grep 'drawable\-xxxhdpi')
+drawable_v21=$(echo "$search_result" | grep 'drawable\-anydpi\-v21')
 
 
 # Copy
@@ -88,8 +97,6 @@ do
 	cp -f $f $dst_path/drawable-v21/$(basename $f)
 	echo $f '-->' $dst_path/drawable-v21/$(basename $f)
 done
-
-rm -f /tmp/mvmdrs.tmp
 
 echo ""
 echo "Complete!"
